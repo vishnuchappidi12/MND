@@ -1,0 +1,59 @@
+{
+  "name": "psql_bq3",
+  "appVersion": "0c926483-a04a-11f0-88eb-1256713fbfcf",
+  "description": "Data Pipeline Application",
+  "change": {
+    "author": "cdap",
+    "creationTimeMillis": 1759490034986,
+    "latest": true,
+    "description": ""
+  },
+  "configuration": "{\"resources\":{\"memoryMB\":2048.0,\"virtualCores\":1.0},\"driverResources\":{\"memoryMB\":2048.0,\"virtualCores\":1.0},\"connections\":[{\"from\":\"PostgreSQL\",\"to\":\"Wrangler\"},{\"from\":\"Wrangler\",\"to\":\"BigQuery\"},{\"from\":\"Wrangler\",\"to\":\"GCS\"}],\"comments\":[],\"postActions\":[],\"properties\":{},\"processTimingEnabled\":true,\"stageLoggingEnabled\":false,\"stages\":[{\"name\":\"PostgreSQL\",\"plugin\":{\"name\":\"Postgres\",\"type\":\"batchsource\",\"label\":\"PostgreSQL\",\"artifact\":{\"name\":\"postgresql-plugin\",\"version\":\"1.12.3\",\"scope\":\"SYSTEM\"},\"properties\":{\"useConnection\":\"true\",\"connection\":\"${conn(postgres_source)}\",\"referenceName\":\"products\",\"importQuery\":\"SELECT * FROM \\\"public\\\".\\\"products\\\"\",\"numSplits\":\"1\",\"fetchSize\":\"1000\",\"connectionTimeout\":\"100\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"product_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"name\\\",\\\"type\\\":\\\"string\\\"},{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"supplier_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"price\\\",\\\"type\\\":{\\\"type\\\":\\\"bytes\\\",\\\"logicalType\\\":\\\"decimal\\\",\\\"precision\\\":10,\\\"scale\\\":2}},{\\\"name\\\":\\\"stock\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]}]}\"}},\"outputSchema\":[{\"name\":\"etlSchemaBody\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"product_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"name\\\",\\\"type\\\":\\\"string\\\"},{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"supplier_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"price\\\",\\\"type\\\":{\\\"type\\\":\\\"bytes\\\",\\\"logicalType\\\":\\\"decimal\\\",\\\"precision\\\":10,\\\"scale\\\":2}},{\\\"name\\\":\\\"stock\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]}]}\"}],\"id\":\"PostgreSQL\"},{\"name\":\"Wrangler\",\"plugin\":{\"name\":\"Wrangler\",\"type\":\"transform\",\"label\":\"Wrangler\",\"artifact\":{\"name\":\"wrangler-transform\",\"version\":\"4.11.1\",\"scope\":\"SYSTEM\"},\"properties\":{\"field\":\"*\",\"expressionLanguage\":\"jexl\",\"precondition\":\"false\",\"on-error\":\"fail-pipeline\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"output\\\",\\\"fields\\\":[{\\\"name\\\":\\\"supplier_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"supplier_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"contact_email\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]}]}\",\"workspaceId\":\"9a3cd7b9-9abe-4fea-9074-e078b414b8f3\",\"directives\":\"fill-null-or-empty :supplier_name \\u0027Unknown Supplie\\u0027\"}},\"outputSchema\":[{\"name\":\"etlSchemaBody\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"output\\\",\\\"fields\\\":[{\\\"name\\\":\\\"supplier_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"supplier_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"contact_email\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]}]}\"}],\"inputSchema\":[{\"name\":\"PostgreSQL\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"product_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"name\\\",\\\"type\\\":\\\"string\\\"},{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"supplier_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"price\\\",\\\"type\\\":{\\\"type\\\":\\\"bytes\\\",\\\"logicalType\\\":\\\"decimal\\\",\\\"precision\\\":10,\\\"scale\\\":2}},{\\\"name\\\":\\\"stock\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]}]}\"}],\"id\":\"Wrangler\"},{\"name\":\"BigQuery\",\"plugin\":{\"name\":\"BigQueryTable\",\"type\":\"batchsink\",\"label\":\"BigQuery\",\"artifact\":{\"name\":\"google-cloud\",\"version\":\"0.24.1\",\"scope\":\"SYSTEM\"},\"properties\":{\"useConnection\":\"false\",\"project\":\"famous-gearing-473807-f4\",\"datasetProject\":\"famous-gearing-473807-f4\",\"serviceAccountType\":\"filePath\",\"serviceFilePath\":\"auto-detect\",\"dataset\":\"bigquery_ecommerce\",\"table\":\"supplier \",\"operation\":\"insert\",\"truncateTable\":\"false\",\"allowSchemaRelaxation\":\"false\",\"readTimeout\":\"120\",\"location\":\"US\",\"createPartitionedTable\":\"false\",\"partitioningType\":\"TIME\",\"timePartitioningType\":\"DAY\",\"partitionFilterRequired\":\"false\",\"schema\":\"{\\\"name\\\":\\\"etlSchemaBody\\\",\\\"type\\\":\\\"record\\\",\\\"fields\\\":[{\\\"name\\\":\\\"supplier_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"supplier_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"contact_email\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]}]}\"}},\"outputSchema\":[{\"name\":\"etlSchemaBody\",\"schema\":\"{\\\"name\\\":\\\"etlSchemaBody\\\",\\\"type\\\":\\\"record\\\",\\\"fields\\\":[{\\\"name\\\":\\\"supplier_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"supplier_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"contact_email\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]}]}\"}],\"inputSchema\":[{\"name\":\"Wrangler\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"output\\\",\\\"fields\\\":[{\\\"name\\\":\\\"supplier_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"supplier_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"contact_email\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]}]}\"}],\"id\":\"BigQuery\"},{\"name\":\"GCS\",\"plugin\":{\"name\":\"GCS\",\"type\":\"batchsink\",\"label\":\"GCS\",\"artifact\":{\"name\":\"google-cloud\",\"version\":\"0.24.1\",\"scope\":\"SYSTEM\"},\"properties\":{\"useConnection\":\"false\",\"project\":\"auto-detect\",\"serviceAccountType\":\"filePath\",\"serviceFilePath\":\"auto-detect\",\"path\":\"gs://psql_gcs/suppliers/\",\"suffix\":\"yyyy-MM-dd-HH-mm\",\"format\":\"csv\",\"location\":\"us\",\"contentType\":\"application/octet-stream\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"supplier_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"supplier_name\\\",\\\"type\\\":\\\"string\\\"},{\\\"name\\\":\\\"contact_email\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]}]}\",\"writeHeader\":\"false\"}},\"outputSchema\":[{\"name\":\"etlSchemaBody\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"supplier_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"supplier_name\\\",\\\"type\\\":\\\"string\\\"},{\\\"name\\\":\\\"contact_email\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]}]}\"}],\"inputSchema\":[{\"name\":\"Wrangler\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"output\\\",\\\"fields\\\":[{\\\"name\\\":\\\"supplier_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"supplier_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"contact_email\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]}]}\"}],\"id\":\"GCS\"}],\"schedule\":\"0 1 */1 * *\",\"engine\":\"spark\",\"numOfRecordsPreview\":100.0,\"rangeRecordsPreview\":{\"min\":1.0,\"max\":\"5000\"},\"description\":\"Data Pipeline Application\",\"maxConcurrentRuns\":1.0}",
+  "datasets": [],
+  "programs": [
+    {
+      "type": "Spark",
+      "app": "psql_bq3",
+      "name": "phase-1",
+      "description": "Sources \u0027PostgreSQL\u0027 to sinks \u0027BigQuery\u0027, \u0027GCS\u0027."
+    },
+    {
+      "type": "Workflow",
+      "app": "psql_bq3",
+      "name": "DataPipelineWorkflow",
+      "description": "Data Pipeline Workflow"
+    }
+  ],
+  "plugins": [
+    {
+      "id": "BigQuery",
+      "name": "BigQueryTable",
+      "type": "batchsink"
+    },
+    {
+      "id": "PostgreSQL",
+      "name": "Postgres",
+      "type": "batchsource"
+    },
+    {
+      "id": "GCS",
+      "name": "GCS",
+      "type": "batchsink"
+    },
+    {
+      "id": "Wrangler",
+      "name": "Wrangler",
+      "type": "transform"
+    },
+    {
+      "id": "GCS:csv",
+      "name": "csv",
+      "type": "validatingOutputFormat"
+    }
+  ],
+  "artifact": {
+    "name": "cdap-data-pipeline",
+    "version": "6.11.1",
+    "scope": "SYSTEM"
+  }
+}
