@@ -1,0 +1,58 @@
+{
+  "name": "psql_bq2",
+  "appVersion": "a878f37d-a042-11f0-9cdf-1256713fbfcf",
+  "description": "Data Pipeline Application",
+  "change": {
+    "author": "cdap",
+    "creationTimeMillis": 1759486860534,
+    "latest": true
+  },
+  "configuration": "{\"resources\":{\"memoryMB\":2048.0,\"virtualCores\":1.0},\"driverResources\":{\"memoryMB\":2048.0,\"virtualCores\":1.0},\"connections\":[{\"from\":\"PostgreSQL\",\"to\":\"Wrangler\"},{\"from\":\"Wrangler\",\"to\":\"BigQuery\"},{\"from\":\"Wrangler\",\"to\":\"GCS\"}],\"comments\":[],\"postActions\":[],\"properties\":{},\"processTimingEnabled\":true,\"stageLoggingEnabled\":false,\"stages\":[{\"name\":\"PostgreSQL\",\"plugin\":{\"name\":\"Postgres\",\"type\":\"batchsource\",\"label\":\"PostgreSQL\",\"artifact\":{\"name\":\"postgresql-plugin\",\"version\":\"1.12.3\",\"scope\":\"SYSTEM\"},\"properties\":{\"useConnection\":\"true\",\"connection\":\"${conn(postgres_source)}\",\"referenceName\":\"categories\",\"importQuery\":\"SELECT * FROM \\\"public\\\".\\\"categories\\\"\",\"numSplits\":\"1\",\"fetchSize\":\"1000\",\"connectionTimeout\":\"100\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"category_name\\\",\\\"type\\\":\\\"string\\\"}]}\"}},\"outputSchema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"category_name\\\",\\\"type\\\":\\\"string\\\"}]}\",\"id\":\"PostgreSQL\"},{\"name\":\"Wrangler\",\"plugin\":{\"name\":\"Wrangler\",\"type\":\"transform\",\"label\":\"Wrangler\",\"artifact\":{\"name\":\"wrangler-transform\",\"version\":\"4.11.1\",\"scope\":\"SYSTEM\"},\"properties\":{\"field\":\"*\",\"expressionLanguage\":\"jexl\",\"precondition\":\"false\",\"on-error\":\"fail-pipeline\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"category_name\\\",\\\"type\\\":\\\"string\\\"}]}\",\"workspaceId\":\"79f73234-0be9-4a87-a2c9-f580da5bbf93\"}},\"outputSchema\":[{\"name\":\"etlSchemaBody\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"category_name\\\",\\\"type\\\":\\\"string\\\"}]}\"}],\"inputSchema\":[{\"name\":\"PostgreSQL\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"category_name\\\",\\\"type\\\":\\\"string\\\"}]}\"}],\"id\":\"Wrangler\"},{\"name\":\"BigQuery\",\"plugin\":{\"name\":\"BigQueryTable\",\"type\":\"batchsink\",\"label\":\"BigQuery\",\"artifact\":{\"name\":\"google-cloud\",\"version\":\"0.24.1\",\"scope\":\"SYSTEM\"},\"properties\":{\"useConnection\":\"false\",\"project\":\"famous-gearing-473807-f4\",\"datasetProject\":\"famous-gearing-473807-f4\",\"serviceAccountType\":\"filePath\",\"serviceFilePath\":\"auto-detect\",\"dataset\":\"bigquery_ecommerce\",\"table\":\"categories \",\"operation\":\"insert\",\"truncateTable\":\"false\",\"allowSchemaRelaxation\":\"false\",\"readTimeout\":\"120\",\"location\":\"US\",\"createPartitionedTable\":\"false\",\"partitioningType\":\"TIME\",\"timePartitioningType\":\"DAY\",\"partitionFilterRequired\":\"false\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"category_name\\\",\\\"type\\\":\\\"string\\\"}]}\"}},\"outputSchema\":[{\"name\":\"etlSchemaBody\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"category_name\\\",\\\"type\\\":\\\"string\\\"}]}\"}],\"inputSchema\":[{\"name\":\"Wrangler\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"category_name\\\",\\\"type\\\":\\\"string\\\"}]}\"}],\"id\":\"BigQuery\"},{\"name\":\"GCS\",\"plugin\":{\"name\":\"GCS\",\"type\":\"batchsink\",\"label\":\"GCS\",\"artifact\":{\"name\":\"google-cloud\",\"version\":\"0.24.1\",\"scope\":\"SYSTEM\"},\"properties\":{\"useConnection\":\"false\",\"project\":\"auto-detect\",\"serviceAccountType\":\"filePath\",\"serviceFilePath\":\"auto-detect\",\"path\":\"gs://psql_gcs/categories /\",\"suffix\":\"yyyy-MM-dd-HH-mm\",\"format\":\"csv\",\"location\":\"us\",\"contentType\":\"application/octet-stream\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"category_name\\\",\\\"type\\\":\\\"string\\\"}]}\",\"writeHeader\":\"false\"}},\"outputSchema\":[{\"name\":\"etlSchemaBody\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"category_name\\\",\\\"type\\\":\\\"string\\\"}]}\"}],\"inputSchema\":[{\"name\":\"Wrangler\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"category_id\\\",\\\"type\\\":\\\"int\\\"},{\\\"name\\\":\\\"category_name\\\",\\\"type\\\":\\\"string\\\"}]}\"}],\"id\":\"GCS\"}],\"schedule\":\"0 1 */1 * *\",\"engine\":\"spark\",\"numOfRecordsPreview\":100.0,\"rangeRecordsPreview\":{\"min\":1.0,\"max\":\"5000\"},\"maxConcurrentRuns\":1.0}",
+  "datasets": [],
+  "programs": [
+    {
+      "type": "Spark",
+      "app": "psql_bq2",
+      "name": "phase-1",
+      "description": "Sources \u0027PostgreSQL\u0027 to sinks \u0027BigQuery\u0027, \u0027GCS\u0027."
+    },
+    {
+      "type": "Workflow",
+      "app": "psql_bq2",
+      "name": "DataPipelineWorkflow",
+      "description": "Data Pipeline Workflow"
+    }
+  ],
+  "plugins": [
+    {
+      "id": "BigQuery",
+      "name": "BigQueryTable",
+      "type": "batchsink"
+    },
+    {
+      "id": "PostgreSQL",
+      "name": "Postgres",
+      "type": "batchsource"
+    },
+    {
+      "id": "GCS",
+      "name": "GCS",
+      "type": "batchsink"
+    },
+    {
+      "id": "Wrangler",
+      "name": "Wrangler",
+      "type": "transform"
+    },
+    {
+      "id": "GCS:csv",
+      "name": "csv",
+      "type": "validatingOutputFormat"
+    }
+  ],
+  "artifact": {
+    "name": "cdap-data-pipeline",
+    "version": "6.11.1",
+    "scope": "SYSTEM"
+  }
+}
